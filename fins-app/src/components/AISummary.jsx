@@ -100,15 +100,15 @@
 
 import React, { useState } from 'react';
 import { Sparkles, BrainCircuit } from 'lucide-react';
-import { getMockAIInsight } from '../api/aiSummary'; // mock API
+import { getMockAIInsight } from '../api/aiSummary';
 import { loadState, saveState } from '../utils/localStorage';
 
 const AISummary = ({ totalIncome, totalExpense, transactions, budget, goals }) => {
   const [insight, setInsight] = useState(loadState('aiInsightCache', null));
   const [loading, setLoading] = useState(false);
 
-  // Hitung kategori pengeluaran terbesar
   const getTopCategories = () => {
+    // ... (fungsi ini tetap sama)
     const expenseByCategory = transactions
       .filter(t => t.type === 'expense')
       .reduce((acc, t) => {
@@ -129,90 +129,66 @@ const AISummary = ({ totalIncome, totalExpense, transactions, budget, goals }) =
     setLoading(true);
     setInsight(null);
     try {
-      const data = {
-        totalIncome,
-        totalExpense,
-        topCategories: getTopCategories(),
-        budget,
-        goals,
-      };
-      // sementara pakai mock
-      const result = await getMockAIInsight(data);
+      const data = { totalIncome, totalExpense, topCategories: getTopCategories(), budget, goals };
+      const result = await getMockAIInsight(data); 
       setInsight(result);
       saveState('aiInsightCache', result);
     } catch (error) {
       console.error("Failed to get AI insight:", error);
-      setInsight({
-        summary: "Gagal memuat insight. Coba lagi nanti.",
-        recommendations: [],
-        overBudgetAdvice: ""
-      });
+      setInsight({ summary: "Gagal memuat insight. Coba lagi nanti.", recommendations: [], overBudgetAdvice: "" });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-green-50 p-6 rounded-xl shadow-lg border border-gray-200/50">
+    <div className="bg-gray-800/50 backdrop-blur-md border border-white/10 rounded-xl p-6">
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="text-xl font-bold text-text-dark flex items-center">
-            <BrainCircuit className="mr-3 text-primary" size={24} /> AI Financial Insight
+          <h3 className="text-xl font-bold text-white flex items-center">
+            <BrainCircuit className="mr-3 text-blue-400" size={24} /> AI Financial Insight
           </h3>
-          <p className="text-sm text-gray-500">Analisis otomatis kondisi keuanganmu.</p>
+          <p className="text-sm text-gray-400 mt-1">Analisis otomatis kondisi keuanganmu.</p>
         </div>
         <button
           onClick={handleFetchInsight}
           disabled={loading}
-          className="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-opacity-90 transition-all flex items-center shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="bg-white/5 border border-white/10 px-4 py-2 rounded-lg font-semibold text-gray-300 hover:bg-white/10 hover:text-white transition-all flex items-center shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Sparkles size={16} className="mr-2" />
+          <Sparkles size={16} className={`mr-2 ${loading ? 'animate-spin' : ''}`} />
           {loading ? 'Menganalisis...' : 'Dapatkan Insight'}
         </button>
       </div>
-
-      {loading && (
-        <p className="text-center text-gray-600">
-          AI sedang menganalisis data keuangan Anda...
-        </p>
-      )}
+      
+      {loading && <div className="text-center text-gray-400 py-8">AI sedang menganalisis data keuangan Anda...</div>}
 
       {insight && !loading && (
-        <div className="space-y-4">
+        <div className="space-y-4 mt-4 border-t border-white/10 pt-4">
           <div>
-            <h4 className="font-semibold text-text-dark">Ringkasan</h4>
-            <p className="text-gray-600">{insight.summary}</p>
+            <h4 className="font-semibold text-gray-200">Ringkasan</h4>
+            <p className="text-gray-400 text-sm mt-1">{insight.summary}</p>
           </div>
 
           {insight.overBudgetAdvice && (
-            <div className="p-3 bg-red-100 border-l-4 border-red-500 rounded-r-md">
-              <h4 className="font-semibold text-red-800">Saran (Over Budget)</h4>
-              <p className="text-red-700 whitespace-pre-line">
-                {insight.overBudgetAdvice}
-              </p>
+            <div className="p-4 bg-red-900/50 border-l-4 border-red-500 rounded-r-lg">
+              <h4 className="font-semibold text-red-300">Saran (Over Budget)</h4>
+              <p className="text-red-400 text-sm mt-1 whitespace-pre-line">{insight.overBudgetAdvice}</p>
             </div>
           )}
-
+          
           <div>
-            <h4 className="font-semibold text-text-dark">Rekomendasi Aksi</h4>
-            <ul className="list-disc list-inside text-gray-600 space-y-1">
+            <h4 className="font-semibold text-gray-200">Rekomendasi Aksi</h4>
+            <ul className="list-disc list-inside text-gray-400 space-y-1 mt-2 text-sm">
               {insight.recommendations.map((rec, i) => (
                 <li key={i}>{rec}</li>
               ))}
             </ul>
           </div>
-
-          <p className="text-xs text-gray-400 text-center pt-2">
-            Insight ini dihasilkan oleh AI dan hanya bersifat rekomendasi. Dibuat pada{" "}
-            {new Date().toLocaleString()}.
-          </p>
+          <p className="text-xs text-gray-500 text-center pt-4">Insight ini dihasilkan oleh AI dan hanya bersifat rekomendasi.</p>
         </div>
       )}
-
       {!insight && !loading && (
-        <p className="text-center text-gray-500">
-          Klik tombol untuk mendapatkan ringkasan dan rekomendasi dari AI.
-        </p>
+        <div className="text-center text-gray-500 py-8 border-t border-white/10 mt-4">Klik tombol untuk mendapatkan ringkasan dan rekomendasi dari AI.</div>
       )}
     </div>
   );

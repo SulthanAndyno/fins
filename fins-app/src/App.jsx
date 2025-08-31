@@ -183,6 +183,13 @@ const App = () => {
     toast.success('Tujuan baru ditambahkan!'); 
   };
 
+  // --- FITUR BARU YANG DITAMBAHKAN ---
+  const deleteGoal = (id) => {
+    setGoals(prev => prev.filter(g => g.id !== id));
+    toast('Tujuan berhasil dihapus.', { icon: '🗑️' });
+  };
+  // ------------------------------------
+
   return (
     <Router>
       <Toaster 
@@ -213,13 +220,19 @@ const App = () => {
                 goals={goals}
                 addGoal={addGoal}
                 setGoals={setGoals}
+                deleteGoal={deleteGoal} // <-- PROP BARU DITERUSKAN
               />
             } />
             <Route path="/history" element={
               <TransactionHistory transactions={transactions} deleteTransaction={deleteTransaction} />
             } />
             <Route path="/goals" element={
-              <GoalsPage goals={goals} addGoal={addGoal} setGoals={setGoals} />
+              <GoalsPage 
+                goals={goals} 
+                addGoal={addGoal} 
+                setGoals={setGoals} 
+                deleteGoal={deleteGoal} // <-- PROP BARU DITERUSKAN
+              />
             } />
             <Route path="/settings" element={
               <SettingsPage />

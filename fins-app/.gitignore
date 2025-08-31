@@ -1,4 +1,12 @@
-# Logs
+# ===================================================================
+# FINS - Financial Insight (React + Vite) .gitignore
+# ===================================================================
+
+# -- KETERGANTUNGAN & LOG --
+# Abaikan folder dependensi yang bisa diinstal ulang
+/node_modules
+
+# Abaikan semua jenis file log
 logs
 *.log
 npm-debug.log*
@@ -7,18 +15,38 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# -- HASIL BUILD & CACHE --
+# Abaikan folder output dari proses build
+/dist
+/dist-ssr
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+# Abaikan cache dari Vite
+.vite/
+# Abaikan cache dari package manager
+.npm
+.yarn/cache
+.pnpm-store
+
+# -- FILE RAHASIA (SANGAT PENTING!) --
+# JANGAN PERNAH commit file environment yang berisi API Keys atau rahasia lainnya!
+.env
+.env.local
+.env.*.local
+
+# -- DIREKTORI EDITOR & IDE --
+# Abaikan file spesifik dari code editor agar tidak ada konflik antar tim
 .idea
-.DS_Store
+.vscode/*
+# Pengecualian: simpan file rekomendasi extension agar semua anggota tim punya extension yang sama
+!.vscode/extensions.json
+!.vscode/settings.json
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# -- FILE SISTEM OPERASI --
+# Abaikan file metadata yang dibuat oleh sistem operasi
+.DS_Store
+Thumbs.db
