@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-const TransactionForm = ({ addTransaction }) => {
+// --- TERIMA PROPS BARU: 'categories' ---
+const TransactionForm = ({ addTransaction, categories }) => {
   const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('Makanan');
+  const [category, setCategory] = useState(''); // Default dikosongkan dulu
   const [type, setType] = useState('expense');
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+
+  // --- LOGIKA BARU: OTOMATIS SET KATEGORI PERTAMA SAAT TIPE BERUBAH ---
+  useEffect(() => {
+    // Saat tipe transaksi berubah (misal dari pengeluaran ke pemasukan),
+    // otomatis set state 'category' ke pilihan pertama yang tersedia.
+    // Ini mencegah bug di mana kategori lama yang tidak valid tetap terpilih.
+    if (type === 'expense' && categories.expense.length > 0) {
+      setCategory(categories.expense[0]);
+    } else if (type === 'income' && categories.income.length > 0) {
+      setCategory(categories.income[0]);
+    } else {
+      setCategory(''); // Kosongkan jika tidak ada kategori tersedia
+    }
+  }, [type, categories]); // Jalankan efek ini setiap kali 'type' atau 'categories' berubah
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,10 +29,11 @@ const TransactionForm = ({ addTransaction }) => {
     setAmount('');
   };
 
-  const expenseCategories = ['Makanan', 'Transportasi', 'Hiburan', 'Tagihan', 'Belanja', 'Lainnya'];
-  const incomeCategories = ['Gaji', 'Bonus', 'Freelance', 'Hadiah', 'Lainnya'];
+  // --- HAPUS DAFTAR KATEGORI HARDCODED ---
+  // const expenseCategories = ['Makanan', ...];
+  // const incomeCategories = ['Gaji', ...];
 
-  // --- STYLING BARU ---
+  // --- STYLING KEREN DARI KAMU (TETAP SAMA) ---
   const inputStyle = "w-full p-3 bg-gray-700/50 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all";
   const labelStyle = "block text-sm font-medium text-gray-300 mb-2";
   const buttonBaseStyle = "w-1/2 p-2 rounded-md font-semibold transition-colors";
@@ -39,8 +55,9 @@ const TransactionForm = ({ addTransaction }) => {
         </div>
         <div>
           <label htmlFor="category" className={labelStyle}>Kategori</label>
-          <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} className={inputStyle}>
-            {(type === 'expense' ? expenseCategories : incomeCategories).map(cat => (
+          <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} className={inputStyle} disabled={type === 'expense' ? !categories.expense.length : !categories.income.length}>
+            {/* --- GUNAKAN KATEGORI DINAMIS DARI PROPS --- */}
+            {(type === 'expense' ? categories.expense : categories.income).map(cat => (
               <option key={cat} value={cat} className="bg-gray-800 text-white">{cat}</option>
             ))}
           </select>

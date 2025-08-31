@@ -1,5 +1,4 @@
 import React from 'react';
-// TAMBAHKAN 'motion' DARI FRAMER-MOTION DI SINI
 import { motion } from 'framer-motion';
 import { Wallet, TrendingUp, TrendingDown } from 'lucide-react';
 import TransactionForm from './TransactionForm';
@@ -18,7 +17,18 @@ const InfoCard = ({ title, amount, icon, iconBgColor }) => (
     </div>
 );
 
-const Dashboard = ({ transactions, addTransaction, budget, goals, setBudget, addGoal, setGoals }) => {
+// --- SEMUA PROPS YANG DIBUTUHKAN SUDAH DITERIMA DI SINI ---
+const Dashboard = ({ 
+  transactions, 
+  addTransaction, 
+  budget, 
+  setBudget, 
+  goals, 
+  addGoal, 
+  setGoals, 
+  deleteGoal,
+  categories // <-- PROPS PENTING SUDAH DITERIMA
+}) => {
     const totalIncome = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
     const totalExpense = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
     const balance = totalIncome - totalExpense;
@@ -30,7 +40,7 @@ const Dashboard = ({ transactions, addTransaction, budget, goals, setBudget, add
         <motion.div className="p-4 sm:p-6 lg:p-8" initial="hidden" animate="visible" variants={containerVariants}>
             <motion.h1 variants={itemVariants} className="text-3xl font-bold text-white mb-8">Dashboard</motion.h1>
 
-            <motion.div variants={containerVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <motion.div variants={containerVariants} className="grid grid-cols-1 md-grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <motion.div variants={itemVariants}><InfoCard title="Total Pemasukan" amount={totalIncome} icon={<TrendingUp size={28} className="text-white"/>} iconBgColor="bg-emerald-500" /></motion.div>
                 <motion.div variants={itemVariants}><InfoCard title="Total Pengeluaran" amount={totalExpense} icon={<TrendingDown size={28} className="text-white"/>} iconBgColor="bg-red-500" /></motion.div>
                 <motion.div variants={itemVariants}><InfoCard title="Saldo Saat Ini" amount={balance} icon={<Wallet size={28} className="text-white"/>} iconBgColor="bg-blue-500" /></motion.div>
@@ -42,9 +52,25 @@ const Dashboard = ({ transactions, addTransaction, budget, goals, setBudget, add
                     <motion.div variants={itemVariants}><Charts transactions={transactions} budget={budget} /></motion.div>
                 </motion.div>
                 <motion.div variants={containerVariants} className="lg:col-span-1 space-y-8">
-                    <motion.div variants={itemVariants}><TransactionForm addTransaction={addTransaction} /></motion.div>
-                    <motion.div variants={itemVariants}><BudgetDisplay budget={budget} totalExpense={totalExpense} setBudget={setBudget} /></motion.div>
-                    <motion.div variants={itemVariants}><GoalsDisplay goals={goals} addGoal={addGoal} setGoals={setGoals} /></motion.div>
+                    <motion.div variants={itemVariants}>
+                        {/* --- PROP 'categories' DITERUSKAN KE TRANSACTIONFORM --- */}
+                        <TransactionForm 
+                            addTransaction={addTransaction} 
+                            categories={categories} 
+                        />
+                    </motion.div>
+                    <motion.div variants={itemVariants}>
+                        <BudgetDisplay budget={budget} totalExpense={totalExpense} setBudget={setBudget} />
+                    </motion.div>
+                    <motion.div variants={itemVariants}>
+                        {/* --- PROP 'deleteGoal' DITERUSKAN KE GOALSDISPLAY --- */}
+                        <GoalsDisplay 
+                            goals={goals} 
+                            addGoal={addGoal} 
+                            setGoals={setGoals} 
+                            deleteGoal={deleteGoal} 
+                        />
+                    </motion.div>
                 </motion.div>
             </div>
         </motion.div>

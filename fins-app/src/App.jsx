@@ -144,30 +144,40 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 import { loadState, saveState } from './utils/localStorage';
 
-// Layout
+// Layout Components
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 
-// Pages
+// Page Components
 import Dashboard from './components/Dashboard';
 import TransactionHistory from './components/TransactionHistory';
 import GoalsPage from './pages/GoalsPage';
 import SettingsPage from './pages/SettingsPage';
 
 const App = () => {
+  // State untuk UI
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
-  // State Management
+  // --- STATE MANAGEMENT UTAMA ---
   const [transactions, setTransactions] = useState(() => loadState('transactions', []));
   const [budget, setBudget] = useState(() => loadState('budget', { amount: 5000000, period: 'bulanan' }));
   const [goals, setGoals] = useState(() => loadState('goals', []));
 
-  // LocalStorage Sync
+  // --- State untuk Fitur Baru: Kategori Kustom ---
+  const defaultCategories = {
+    expense: ['Makanan', 'Transportasi', 'Hiburan', 'Tagihan', 'Belanja', 'Lainnya'],
+    income: ['Gaji', 'Bonus', 'Freelance', 'Hadiah', 'Lainnya'],
+  };
+  const [categories, setCategories] = useState(() => loadState('categories', defaultCategories));
+
+  // --- SINKRONISASI SEMUA STATE KE LOCALSTORAGE ---
   useEffect(() => { saveState('transactions', transactions); }, [transactions]);
   useEffect(() => { saveState('budget', budget); }, [budget]);
   useEffect(() => { saveState('goals', goals); }, [goals]);
+  useEffect(() => { saveState('categories', categories); }, [categories]);
 
-  // Handler Functions with Toast Notifications
+  // --- HANDLER FUNCTIONS ---
+  // Transaksi
   const addTransaction = (transaction) => {
     setTransactions(prev => [transaction, ...prev].sort((a, b) => new Date(b.date) - new Date(a.date)));
     toast.success('Transaksi berhasil ditambahkan!');
@@ -178,17 +188,16 @@ const App = () => {
     toast('Transaksi dihapus.', { icon: '🗑️' });
   };
   
+  // Tujuan Finansial
   const addGoal = (goal) => { 
     setGoals(prev => [...prev, goal]); 
     toast.success('Tujuan baru ditambahkan!'); 
   };
 
-  // --- FITUR BARU YANG DITAMBAHKAN ---
   const deleteGoal = (id) => {
     setGoals(prev => prev.filter(g => g.id !== id));
     toast('Tujuan berhasil dihapus.', { icon: '🗑️' });
   };
-  // ------------------------------------
 
   return (
     <Router>
@@ -220,7 +229,8 @@ const App = () => {
                 goals={goals}
                 addGoal={addGoal}
                 setGoals={setGoals}
-                deleteGoal={deleteGoal} // <-- PROP BARU DITERUSKAN
+                deleteGoal={deleteGoal}
+                categories={categories} // <-- Meneruskan kategori
               />
             } />
             <Route path="/history" element={
@@ -231,11 +241,16 @@ const App = () => {
                 goals={goals} 
                 addGoal={addGoal} 
                 setGoals={setGoals} 
-                deleteGoal={deleteGoal} // <-- PROP BARU DITERUSKAN
+                deleteGoal={deleteGoal}
+                transactions={transactions} // <-- Meneruskan transaksi untuk proyeksi
               />
             } />
             <Route path="/settings" element={
-              <SettingsPage />
+              <SettingsPage
+                categories={categories}
+                setCategories={setCategories}
+                defaultCategories={defaultCategories}
+              />
             } />
           </Routes>
         </main>
