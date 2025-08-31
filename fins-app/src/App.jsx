@@ -78,40 +78,131 @@
 
 // export default App;
 
+// import React, { useState, useEffect } from 'react';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import { loadState, saveState } from './utils/localStorage';
+
+// // Layout
+// import Sidebar from './components/Sidebar';
+// import Header from './components/Header'; // Mungkin Header bisa kita gabungkan ke konten utama
+
+// // Pages
+// import Dashboard from './components/Dashboard';
+// import TransactionHistory from './components/TransactionHistory';
+// // Anda perlu membuat komponen halaman baru untuk Goals dan Settings
+
+// const App = () => {
+//   // ... (semua state management Anda tetap di sini) ...
+//   const [transactions, setTransactions] = useState(() => loadState('transactions', []));
+//   const [budget, setBudget] = useState(() => loadState('budget', { amount: 5000000, period: 'bulanan' }));
+//   const [goals, setGoals] = useState(() => loadState('goals', [{ id: '1', title: 'Beli Motor', target: 15000000, current: 3250000 }]));
+
+//   useEffect(() => { saveState('transactions', transactions); }, [transactions]);
+//   useEffect(() => { saveState('budget', budget); }, [budget]);
+//   useEffect(() => { saveState('goals', goals); }, [goals]);
+
+//   const addTransaction = (transaction) => setTransactions(prev => [transaction, ...prev].sort((a, b) => new Date(b.date) - new Date(a.date)));
+//   const deleteTransaction = (id) => setTransactions(prev => prev.filter(t => t.id !== id));
+//   const addGoal = (goal) => setGoals(prev => [...prev, goal]);
+
+
+//   return (
+//     <Router>
+//       <div className="flex h-screen bg-background font-sans">
+//         <Sidebar />
+//         <main className="flex-1 overflow-y-auto">
+//           {/* Header bisa diletakkan di sini jika ingin di setiap halaman */}
+//           <Routes>
+//             <Route path="/" element={
+//               <Dashboard
+//                 transactions={transactions}
+//                 addTransaction={addTransaction}
+//                 budget={budget}
+//                 setBudget={setBudget}
+//                 goals={goals}
+//                 addGoal={addGoal}
+//                 setGoals={setGoals}
+//               />
+//             } />
+//             <Route path="/history" element={
+//               <TransactionHistory transactions={transactions} deleteTransaction={deleteTransaction} />
+//             } />
+//             {/* Tambahkan rute untuk /goals dan /settings nanti */}
+//             {/* <Route path="/goals" element={<GoalsPage ... />} /> */}
+//             {/* <Route path="/settings" element={<SettingsPage ... />} /> */}
+//           </Routes>
+//         </main>
+//       </div>
+//     </Router>
+//   );
+// };
+
+// export default App;
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster, toast } from 'react-hot-toast';
 import { loadState, saveState } from './utils/localStorage';
 
 // Layout
 import Sidebar from './components/Sidebar';
-import Header from './components/Header'; // Mungkin Header bisa kita gabungkan ke konten utama
+import Header from './components/Header';
 
 // Pages
 import Dashboard from './components/Dashboard';
 import TransactionHistory from './components/TransactionHistory';
-// Anda perlu membuat komponen halaman baru untuk Goals dan Settings
+import GoalsPage from './pages/GoalsPage';
+import SettingsPage from './pages/SettingsPage';
 
 const App = () => {
-  // ... (semua state management Anda tetap di sini) ...
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
+  // State Management
   const [transactions, setTransactions] = useState(() => loadState('transactions', []));
   const [budget, setBudget] = useState(() => loadState('budget', { amount: 5000000, period: 'bulanan' }));
-  const [goals, setGoals] = useState(() => loadState('goals', [{ id: '1', title: 'Beli Motor', target: 15000000, current: 3250000 }]));
+  const [goals, setGoals] = useState(() => loadState('goals', []));
 
+  // LocalStorage Sync
   useEffect(() => { saveState('transactions', transactions); }, [transactions]);
   useEffect(() => { saveState('budget', budget); }, [budget]);
   useEffect(() => { saveState('goals', goals); }, [goals]);
 
-  const addTransaction = (transaction) => setTransactions(prev => [transaction, ...prev].sort((a, b) => new Date(b.date) - new Date(a.date)));
-  const deleteTransaction = (id) => setTransactions(prev => prev.filter(t => t.id !== id));
-  const addGoal = (goal) => setGoals(prev => [...prev, goal]);
-
+  // Handler Functions with Toast Notifications
+  const addTransaction = (transaction) => {
+    setTransactions(prev => [transaction, ...prev].sort((a, b) => new Date(b.date) - new Date(a.date)));
+    toast.success('Transaksi berhasil ditambahkan!');
+  };
+  
+  const deleteTransaction = (id) => {
+    setTransactions(prev => prev.filter(t => t.id !== id));
+    toast('Transaksi dihapus.', { icon: '🗑️' });
+  };
+  
+  const addGoal = (goal) => { 
+    setGoals(prev => [...prev, goal]); 
+    toast.success('Tujuan baru ditambahkan!'); 
+  };
 
   return (
     <Router>
-      <div className="flex h-screen bg-background font-sans">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto">
-          {/* Header bisa diletakkan di sini jika ingin di setiap halaman */}
+      <Toaster 
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#1F2937', // bg-gray-800
+            color: '#D1D5DB',     // text-gray-300
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          },
+        }}
+      />
+      
+      <div className="min-h-screen bg-gray-900 text-gray-300 font-sans">
+        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+        
+        <main className="transition-all duration-300">
+          <Header setIsSidebarOpen={setIsSidebarOpen} />
           <Routes>
             <Route path="/" element={
               <Dashboard
@@ -127,9 +218,12 @@ const App = () => {
             <Route path="/history" element={
               <TransactionHistory transactions={transactions} deleteTransaction={deleteTransaction} />
             } />
-            {/* Tambahkan rute untuk /goals dan /settings nanti */}
-            {/* <Route path="/goals" element={<GoalsPage ... />} /> */}
-            {/* <Route path="/settings" element={<SettingsPage ... />} /> */}
+            <Route path="/goals" element={
+              <GoalsPage goals={goals} addGoal={addGoal} setGoals={setGoals} />
+            } />
+            <Route path="/settings" element={
+              <SettingsPage />
+            } />
           </Routes>
         </main>
       </div>

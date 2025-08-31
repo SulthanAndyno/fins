@@ -1,11 +1,16 @@
 import React from 'react';
-import { Coins } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
-const Header = () => {
+const Header = ({ setIsSidebarOpen }) => {
   return (
-    <header className="bg-primary text-white p-4 flex items-center shadow-md">
-      <Coins className="text-accent-gold mr-3" size={32} />
-      <h1 className="text-2xl font-bold">FINS – Financial Insight</h1>
+    <header className="p-4 flex items-center">
+      <button 
+        onClick={() => setIsSidebarOpen(true)}
+        className="p-2 rounded-md text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
+      >
+        <Menu size={24} />
+      </button>
+      {/* Anda bisa menambahkan judul halaman di sini nanti */}
     </header>
   );
 };
