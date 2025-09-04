@@ -1,0 +1,68 @@
+// netlify/functions/getAIInsight.js
+
+// Gunakan 'import Replicate from "replicate";' jika package.json di root punya "type": "module"
+const Replicate = require("replicate");
+
+const replicate = new Replicate({
+  auth: process.env.REPLICATE_API_TOKEN, // Ambil token dari environment variable Netlify
+});
+
+exports.handler = async function (event, context) {
+  // Hanya izinkan metode POST
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method Not Allowed" };
+  }
+
+  try {
+    const { financialData } = JSON.parse(event.body);
+
+    // --- PROMPT ENGINEERING ---
+    // Kita buat prompt yang sangat terstruktur
+    const prompt = `
+      You are FINS, a helpful and concise financial assistant. Analyze the following user financial data for the current month, provided in Indonesian Rupiah (IDR).
+
+      <financial_data>
+      Total Income: IDR ${financialData.totalIncome.toLocaleString()}
+      Total Expense: IDR ${financialData.totalExpense.toLocaleString()}
+      Top Spending Categories: ${financialData.topCategories.map(c => `${c.name} (${c.percent}%)`).join(', ')}
+      Monthly Budget: IDR ${financialData.budget.amount.toLocaleString()} (Status: ${Math.round((financialData.totalExpense / financialData.budget.amount) * 100)}% used)
+      Financial Goal: "${financialData.goals[0]?.title || 'Not set'}" (Progress: ${Math.round(((financialData.goals[0]?.current || 0) / (financialData.goals[0]?.target || 1)) * 100)}%)
+      </financial_data>
+
+      Your task is to provide a concise financial analysis in BAHASA INDONESIA. Your response MUST be a valid JSON object, without any introductory text or markdown formatting. The JSON object must have these exact keys: "summary" (string), "recommendations" (array of 3 short strings), and "overBudgetAdvice" (string, empty if not over budget).
+
+      - summary: A 2-3 sentence friendly summary of the user's financial situation.
+      - recommendations: Three actionable and practical recommendations to improve their finances or reach their goal faster.
+      - overBudgetAdvice: If the user is over budget (expense > budget), provide a short, 2-step action plan. Otherwise, this should be an empty string.
+
+      Be encouraging and practical.
+    `;
+
+    const output = await replicate.run(
+      "ibm/granite-13b-chat-v2",
+      {
+        input: {
+          prompt: prompt,
+          max_new_tokens: 250, // Batasi output untuk hemat token
+          temperature: 0.6,
+        }
+      }
+    );
+
+    // Gabungkan output array menjadi satu string JSON
+    const resultText = output.join("");
+    
+    // Kirimkan kembali sebagai JSON
+    return {
+      statusCode: 200,
+      body: resultText,
+    };
+
+  } catch (error) {
+    console.error(error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Failed to get AI insight." }),
+    };
+  }
+};
