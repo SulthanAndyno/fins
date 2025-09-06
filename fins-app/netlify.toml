@@ -1,7 +1,13 @@
-# netlify.toml
 [build]
   command = "npm run build"
   publish = "dist"
 
 [functions]
   directory = "netlify/functions"
+
+# --- GUNAKAN FORMAT INI ---
+# Ini artinya: "Untuk semua function (tanda *) yang ada..."
+[[functions."*"]]
+  # "...atur batas waktu tunggunya menjadi 60 detik."
+  timeout = 60
+# -----------------------------

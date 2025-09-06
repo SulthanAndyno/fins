@@ -26,13 +26,13 @@ exports.handler = async function (event, context) {
       Your task is to provide a concise financial analysis in BAHASA INDONESIA. Your response MUST be a valid JSON object, without any introductory text or markdown formatting. The JSON object must have these exact keys: "summary" (string), "recommendations" (array of 3 short strings), and "overBudgetAdvice" (string, empty if not over budget).
     `;
 
-    const output = await replicate.run(
-      "ibm/granite-13b-chat-v2",
+       const output = await replicate.run(
+      // --- GUNAKAN MODEL CEPAT INI ---
+      "ibm-granite/granite-3.3-8b-instruct:a325a0cacfb0aa9226e6bad1abe5385f1073f4c7f8c36e52ed040e5409e6c034",
       {
         input: {
           prompt: prompt,
-          max_new_tokens: 300,
-          temperature: 0.6,
+          max_new_tokens: 350,
         }
       }
     );
