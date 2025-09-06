@@ -365,20 +365,18 @@
 import React, { useState } from 'react';
 import { Sparkles, BrainCircuit } from 'lucide-react';
 
+// Terima semua props yang dibutuhkan dari Dashboard
 const AISummary = ({ totalIncome, totalExpense, transactions, budget, goals }) => {
-  // Caching: Coba ambil dari localStorage dulu
   const [insight, setInsight] = useState(() => {
     try {
       const cached = localStorage.getItem('aiInsightCache');
       if (cached) {
         const { data, timestamp } = JSON.parse(cached);
-        // Cek apakah cache sudah kedaluwarsa (misal, 12 jam)
         if (Date.now() - timestamp < 12 * 60 * 60 * 1000) {
           return data;
         }
       }
     } catch (e) {
-      // Jika ada error parsing JSON, bersihkan cache
       localStorage.removeItem('aiInsightCache');
       return null;
     }
@@ -387,18 +385,12 @@ const AISummary = ({ totalIncome, totalExpense, transactions, budget, goals }) =
 
   const [loading, setLoading] = useState(false);
 
-  // Fungsi untuk mendapatkan 3 kategori pengeluaran teratas
   const getTopCategories = () => {
-    const expenseByCategory = (transactions || [])
-      .filter(t => t.type === 'expense')
-      .reduce((acc, t) => {
+    const expenseByCategory = (transactions || []).filter(t => t.type === 'expense').reduce((acc, t) => {
         acc[t.category] = (acc[t.category] || 0) + t.amount;
         return acc;
       }, {});
-    return Object.entries(expenseByCategory)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 3)
-      .map(([name, value]) => ({
+    return Object.entries(expenseByCategory).sort(([, a], [, b]) => b - a).slice(0, 3).map(([name, value]) => ({
         name,
         percent: totalExpense > 0 ? Math.round((value / totalExpense) * 100) : 0,
       }));
@@ -406,18 +398,17 @@ const AISummary = ({ totalIncome, totalExpense, transactions, budget, goals }) =
   
   const handleFetchInsight = async () => {
     setLoading(true);
-    setInsight(null); // Hapus insight lama saat fetching
+    setInsight(null);
     try {
-      // Siapkan data yang akan dikirim ke backend
       const financialData = {
         totalIncome,
         totalExpense,
         topCategories: getTopCategories(),
-        budget: budget || { amount: 0 }, // Pastikan budget tidak null
-        goals: goals || [], // Pastikan goals tidak null
+        budget: budget || { amount: 0 },
+        goals: goals || [],
       };
 
-      // Panggil backend proxy kita di Netlify
+      // Panggil backend proxy dengan nama yang sudah benar
       const response = await fetch('/.netlify/functions/getAIInsight', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -425,25 +416,18 @@ const AISummary = ({ totalIncome, totalExpense, transactions, budget, goals }) =
       });
 
       if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        const errorBody = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorBody}`);
       }
 
       const result = await response.json();
       
-      // Validasi sederhana untuk memastikan output AI sesuai format
       if (!result.summary || !Array.isArray(result.recommendations)) {
         throw new Error("Invalid response format from AI");
       }
 
       setInsight(result);
-
-      // Simpan hasil ke cache dengan timestamp
-      const cacheData = {
-        data: result,
-        timestamp: Date.now(),
-      };
-      localStorage.setItem('aiInsightCache', JSON.stringify(cacheData));
-
+      localStorage.setItem('aiInsightCache', JSON.stringify({ data: result, timestamp: Date.now() }));
     } catch (error) {
       console.error("Failed to get AI insight:", error);
       setInsight({ summary: "Gagal memuat insight dari AI. Pastikan koneksi internet stabil dan coba lagi nanti.", recommendations: [], overBudgetAdvice: "" });
@@ -484,20 +468,16 @@ const AISummary = ({ totalIncome, totalExpense, transactions, budget, goals }) =
             <h4 className="font-semibold text-gray-200">Ringkasan</h4>
             <p className="text-gray-400 text-sm mt-1">{insight.summary}</p>
           </div>
-
           {insight.overBudgetAdvice && (
             <div className="p-4 bg-red-900/50 border-l-4 border-red-500 rounded-r-lg">
               <h4 className="font-semibold text-red-300">Saran (Over Budget)</h4>
               <p className="text-red-400 text-sm mt-1 whitespace-pre-line">{insight.overBudgetAdvice}</p>
             </div>
           )}
-          
           <div>
             <h4 className="font-semibold text-gray-200">Rekomendasi Aksi</h4>
             <ul className="list-disc list-inside text-gray-400 space-y-1 mt-2 text-sm">
-              {insight.recommendations.map((rec, i) => (
-                <li key={i}>{rec}</li>
-              ))}
+              {insight.recommendations.map((rec, i) => (<li key={i}>{rec}</li>))}
             </ul>
           </div>
           <p className="text-xs text-gray-500 text-center pt-4">Insight ini dihasilkan oleh AI dan hanya bersifat rekomendasi.</p>
