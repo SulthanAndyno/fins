@@ -9,7 +9,7 @@
 [![Netlify](https://img.shields.io/badge/Netlify-Deployed-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://www.netlify.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-![FINS Dashboard Demo](fins-app\public\demo.png)
+![FINS Dashboard Demo](fins-app/public/demo_fins.png)
 
 ### **🚀 [Lihat Live Demo](https://finsid.netlify.app/)**
 
