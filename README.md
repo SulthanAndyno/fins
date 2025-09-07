@@ -21,12 +21,11 @@
 1.  [Gambaran Umum Proyek](#-gambaran-umum-proyek)
 2.  [Fitur Unggulan](#-fitur-unggulan)
 3.  [Arsitektur Aplikasi](#-arsitektur-aplikasi)
-4.  [Tumpukan Teknologi](#️-tumpukan-teknologi)
-5.  [Panduan Instalasi & Setup](#-panduan-instalasi--setup)
-6.  [Penjelasan Dukungan AI](#-penjelasan-dukungan-ai)
-7.  [Rencana Pengembangan](#-rencana-pengembangan)
-8.  [Kontribusi](#-kontribusi)
-9.  [Lisensi](#-lisensi)
+4.  [Tumpukan Teknologi](#️-tumpukan-teknologi) 
+5.  [Penjelasan Dukungan AI](#-penjelasan-dukungan-ai)
+6.  [Rencana Pengembangan](#-rencana-pengembangan)
+7.  [Kontribusi](#-kontribusi)
+8.  [Lisensi](#-lisensi)
 
 ---
 
@@ -90,60 +89,6 @@ FINS dibangun di atas arsitektur *full-stack* modern yang memisahkan antara fron
 | **Routing** | React Router | Standar industri untuk navigasi di React, digunakan untuk mengelola rute statis dan dinamis (`/goals/:goalId`). |
 | **State Management** | React Hooks (`useState`, `useEffect`) | State aplikasi dipusatkan di `App.jsx` (*Lift State Up*). Efektif dan mudah dikelola untuk skala proyek saat ini. |
 | **Deployment** | Netlify | Menyediakan alur kerja CI/CD yang mulus dari GitHub, serta hosting terintegrasi untuk *frontend* dan *serverless functions*. |
-
----
-
-## 🚀 Panduan Instalasi & Setup
-
-Untuk menjalankan proyek ini secara lokal, ikuti langkah-langkah berikut:
-
-### Prasyarat
--   Node.js (v18+)
--   npm / yarn / pnpm
--   Akun [Supabase](https://supabase.com), [Replicate](https://replicate.com), dan [Netlify](https://netlify.com)
--   Netlify CLI: `npm install netlify-cli -g`
-
-### 1. Clone & Instalasi
-```bash
-# Clone repositori
-git clone https://github.com/[USERNAME]/[NAMA-REPO].git
-cd [NAMA-REPO]
-
-# Install dependencies
-npm install
-```
-
-### 2. Setup Environment Variables
-Buat file `.env` di folder utama dan isi dengan kunci dari akun Supabase dan Replicate Anda:
-```env
-# Diambil dari Dashboard Supabase > Settings > API
-VITE_SUPABASE_URL="https://...supabase.co"
-VITE_SUPABASE_ANON_KEY="ey..."
-
-# Diambil dari Dashboard Replicate > API tokens
-REPLICATE_API_TOKEN="r8_..."
-```
-
-### 3. Setup Database Supabase
-1.  Buat proyek baru di Supabase.
-2.  Gunakan **SQL Editor** untuk membuat tabel: `transactions`, `goals`, `budget`, dan `categories`.
-3.  Konfigurasi **Foreign Key** untuk setiap kolom `user_id` agar merujuk ke `auth.users(id)`.
-4.  Aktifkan **Row Level Security (RLS)** untuk setiap tabel dan buat *policies* untuk `SELECT`, `INSERT`, `UPDATE`, `DELETE`.
-5.  Jalankan query SQL untuk membuat dan memberikan izin pada fungsi `reset_user_data`.
-
-### 4. Jalankan Secara Lokal
-Gunakan Netlify Dev untuk menjalankan server frontend dan backend secara bersamaan.
-```bash
-# Hubungkan ke akun Netlify
-netlify login
-
-# Hubungkan ke situs Netlify yang sudah dibuat
-netlify link
-
-# Jalankan server
-netlify dev
-```
-Aplikasi akan tersedia di `http://localhost:8888`.
 
 ---
 
