@@ -18,14 +18,13 @@
 ---
 
 ## 📖 Daftar Isi
-1.  [Gambaran Umum Proyek](#-gambaran-umum-proyek)
-2.  [Fitur Unggulan](#-fitur-unggulan)
+1.  [Gambaran Umum Proyek](#-gambaran-umum)
+2.  [Fitur](#-fitur)
 3.  [Arsitektur Aplikasi](#-arsitektur-aplikasi)
-4.  [Tumpukan Teknologi](#️-tumpukan-teknologi) 
+4.  [Teknologi yang Digunakan](#️-teknologi-yang-digunakan) 
 5.  [Penjelasan Dukungan AI](#-penjelasan-dukungan-ai)
-6.  [Rencana Pengembangan](#-rencana-pengembangan)
-7.  [Kontribusi](#-kontribusi)
-8.  [Lisensi](#-lisensi)
+6.  [Kontribusi](#-kontribusi)
+7.  [Lisensi](#-lisensi)
 
 ---
 
