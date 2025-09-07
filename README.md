@@ -4,10 +4,10 @@
 [![React](https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Postgres-3fcf8e?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/GANTI-DENGAN-NETLIFY-SITE-ID/deploy-status)](https://app.netlify.com/sites/finsid/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/https://finsid.netlify.app//deploy-status)](https://app.netlify.com/sites/finsid/deploys)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-![FINS Dashboard Demo](URL_SCREENSHOT_ATAU_GIF)
+![FINS Dashboard Demo](fins.png)
 
 ### **🚀 [Lihat Live Demo](https://finsid.netlify.app/)**
 
