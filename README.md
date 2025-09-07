@@ -4,10 +4,12 @@
 [![React](https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Postgres-3fcf8e?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/https://finsid.netlify.app//deploy-status)](https://app.netlify.com/sites/finsid/deploys)
+[![IBM Granite](https://img.shields.io/badge/IBM%20Granite-AI-blue?style=for-the-badge&logo=ibm&logoColor=white)](https://research.ibm.com/ai-foundation-models)
+[![Replicate](https://img.shields.io/badge/Replicate-API-000000?style=for-the-badge&logo=replicate&logoColor=white)](https://replicate.com/)
+[![Netlify](https://img.shields.io/badge/Netlify-Deployed-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://www.netlify.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-![FINS Dashboard Demo](fins.png)
+![FINS Dashboard Demo](fins-app\public\demo.png)
 
 ### **🚀 [Lihat Live Demo](https://finsid.netlify.app/)**
 
