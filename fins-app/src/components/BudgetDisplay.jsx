@@ -99,7 +99,7 @@ const BudgetDisplay = ({ budget, totalExpense, updateBudget }) => {
   if (isWarning) progressBarColor = 'bg-amber-500';
   if (isOverBudget) progressBarColor = 'bg-red-600';
 
-  const inputStyle = "p-3 bg-gray-700/50 border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-mono"; // Tambah font-mono di sini
+  const inputStyle = "p-3 bg-gray-700/50 border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all";
 
   return (
     <div className="bg-gray-800/50 backdrop-blur-md border border-white/10 rounded-xl p-6">
@@ -123,12 +123,12 @@ const BudgetDisplay = ({ budget, totalExpense, updateBudget }) => {
           <div className="flex justify-between text-sm text-gray-300 mb-2">
             <span>Terpakai</span>
             {/* --- PERBAIKAN DI SINI: Gunakan font-mono untuk angka --- */}
-            <span className="font-semibold text-white font-mono">Rp {totalExpense.toLocaleString('id-ID')} / {budget.amount.toLocaleString('id-ID')}</span>
+            <span className="font-semibold text-white">Rp {totalExpense.toLocaleString('id-ID')} / {budget.amount.toLocaleString('id-ID')}</span>
           </div>
           <div className="w-full bg-gray-700/50 rounded-full h-4 border border-white/10">
             <div className={`h-full rounded-full transition-all duration-500 ${progressBarColor}`} style={{ width: `${Math.min(percentage, 100)}%` }}></div>
           </div>
-          <p className="text-right text-sm mt-1 font-semibold text-white font-mono">{percentage.toFixed(1)}% terpakai</p>
+          <p className="text-right text-sm mt-1 font-semibold text-white">{percentage.toFixed(1)}% terpakai</p>
           {(isWarning || isOverBudget) && (
              <div className={`mt-3 flex items-center text-sm p-3 rounded-lg ${isOverBudget ? 'bg-red-900/50 text-red-300' : 'bg-amber-900/50 text-amber-300'}`}>
                <AlertCircle size={20} className="mr-3 flex-shrink-0"/> 
