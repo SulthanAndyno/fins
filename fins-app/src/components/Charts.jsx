@@ -3,11 +3,19 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Resp
 import EmptyState from './EmptyState';
 import { BarChart as BarChartIcon } from 'lucide-react';
 
-// Warna cerah untuk chart di background gelap
-const COLORS = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
-const tickStyle = { fill: '#9CA3AF', fontSize: '12px' }; // Warna teks sumbu (abu-abu)
+// --- PERBAIKAN DI SINI: Tambahkan lebih banyak warna cerah ---
+const COLORS = [
+  '#10B981', // emerald-500
+  '#3B82F6', // blue-500
+  '#F59E0B', // amber-500
+  '#EF4444', // red-500
+  '#8B5CF0', // violet-500
+  '#EC4899', // pink-500
+  '#FACC15', // indigo
+  '#D946EF', // fuchsia-500
+];
+const tickStyle = { fill: '#9CA3AF', fontSize: '12px' };
 
-// Custom Tooltip untuk dark theme
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
@@ -21,6 +29,15 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const Charts = ({ transactions, budget }) => {
+  // Penjaga jika props belum siap
+  if (!transactions || !budget) {
+    return (
+      <div className="bg-gray-800/50 p-6 rounded-xl text-center text-gray-400">
+        Memuat grafik...
+      </div>
+    );
+  }
+
   if (transactions.length === 0) {
     return (
       <EmptyState
@@ -53,7 +70,19 @@ const Charts = ({ transactions, budget }) => {
           <h4 className="text-center font-medium text-gray-300 mb-4">Distribusi Pengeluaran</h4>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
-              <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" labelLine={false} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+              <Pie 
+                data={pieChartData} 
+                dataKey="value" 
+                nameKey="name" 
+                cx="50%" 
+                cy="50%" 
+                outerRadius={80} 
+                fill="#8884d8" 
+                labelLine={false} 
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                fontSize={12}
+                stroke="none"
+              >
                 {pieChartData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
               </Pie>
               <Tooltip content={<CustomTooltip />} />

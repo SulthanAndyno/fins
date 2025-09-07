@@ -19,7 +19,10 @@ export default {
   ],
   theme: {
     extend: {
-      // Anda bisa menambahkan warna baru di sini jika mau
+     fontFamily: {
+        // Daftarkan 'mono' untuk kita panggil nanti
+        mono: ['"Roboto Mono"', 'monospace'],
+      }
     },
   },
   plugins: [],

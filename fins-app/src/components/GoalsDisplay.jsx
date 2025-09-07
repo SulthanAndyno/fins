@@ -253,18 +253,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-hot-toast';
 import Modal from './Modal';
 
-const GoalsDisplay = ({ goals, addGoal, setGoals, deleteGoal }) => {
-  // --- STATE UNTUK MODAL TAMBAH PROGRESS ---
+// Terima props yang benar dari App.jsx, termasuk 'updateGoalProgress'
+const GoalsDisplay = ({ goals, addGoal, deleteGoal, updateGoalProgress }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState(null);
   const [progressAmount, setProgressAmount] = useState('');
   
-  // --- STATE UNTUK FORM TAMBAH GOAL ---
   const [title, setTitle] = useState('');
   const [target, setTarget] = useState('');
   const [showForm, setShowForm] = useState(false);
   
-  // --- FUNGSI-FUNGSI UNTUK MODAL ---
   const openProgressModal = (goal) => {
     setSelectedGoal(goal);
     setIsModalOpen(true);
@@ -279,23 +277,18 @@ const GoalsDisplay = ({ goals, addGoal, setGoals, deleteGoal }) => {
   const handleAddProgress = (e) => {
     e.preventDefault();
     const amount = parseFloat(progressAmount);
-    if (!isNaN(amount) && amount > 0) {
-      const updatedGoals = goals.map(g => 
-        g.id === selectedGoal.id ? { ...g, current: Math.min(g.current + amount, g.target) } : g
-      );
-      setGoals(updatedGoals);
-      toast.success('Progress berhasil ditambahkan!');
-      closeProgressModal();
-    } else {
-      toast.error('Masukkan jumlah yang valid.');
+    if (isNaN(amount) || amount <= 0) {
+      return toast.error('Masukkan jumlah yang valid.');
     }
+    // Panggil fungsi cerdas dari props App.jsx
+    updateGoalProgress(selectedGoal, amount); 
+    closeProgressModal();
   };
 
-  // --- FUNGSI-FUNGSI UNTUK MANAJEMEN GOAL ---
   const handleAddGoal = (e) => {
     e.preventDefault();
-    if (!title || !target || isNaN(target)) return;
-    addGoal({ id: uuidv4(), title, target: parseFloat(target), current: 0 });
+    if (!title.trim() || !target || isNaN(target)) return;
+    addGoal({ id: uuidv4(), title: title.trim(), target: parseFloat(target), current: 0 });
     setTitle(''); setTarget(''); setShowForm(false);
   };
 
@@ -307,15 +300,22 @@ const GoalsDisplay = ({ goals, addGoal, setGoals, deleteGoal }) => {
   
   const inputStyle = "w-full p-3 bg-gray-700/50 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all";
   
+  // "Penjaga" untuk mencegah error saat 'goals' belum dimuat
+  if (!goals) {
+    return (
+      <div className="bg-gray-800/50 backdrop-blur-md border border-white/10 rounded-xl p-6 text-center text-gray-400">
+        Memuat tujuan...
+      </div>
+    );
+  }
+
   return (
     <>
-      {/* Container utama untuk form dan daftar */}
       <div className="bg-gray-800/50 backdrop-blur-md border border-white/10 rounded-xl p-6">
         <h3 className="text-xl font-bold text-white mb-4 flex items-center">
           <PiggyBank className="mr-3 text-amber-400" /> Kelola Tujuan Finansial
         </h3>
 
-        {/* Daftar tujuan dalam bentuk list sederhana */}
         <div className="space-y-4">
           {goals.map(goal => (
             <div key={goal.id} className="bg-gray-900/50 p-3 rounded-lg">
@@ -340,12 +340,10 @@ const GoalsDisplay = ({ goals, addGoal, setGoals, deleteGoal }) => {
           )}
         </div>
         
-        {/* Tombol untuk membuka form */}
         <button onClick={() => setShowForm(!showForm)} className="mt-6 text-blue-400 hover:text-blue-300 flex items-center text-sm font-semibold transition-colors">
           <PlusCircle size={16} className="mr-2" /> {showForm ? 'Batal' : 'Tambah Tujuan Baru'}
         </button>
 
-        {/* Form tambah tujuan */}
         {showForm && (
           <form onSubmit={handleAddGoal} className="mt-4 border-t border-white/10 pt-4 space-y-4">
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Nama Tujuan (e.g., Beli Motor)" className={inputStyle} required />
@@ -355,7 +353,6 @@ const GoalsDisplay = ({ goals, addGoal, setGoals, deleteGoal }) => {
         )}
       </div>
 
-      {/* Modal untuk menambah progress */}
       <Modal isOpen={isModalOpen} onClose={closeProgressModal} title={`Tambah Progress untuk "${selectedGoal?.title}"`}>
         <form onSubmit={handleAddProgress} className="space-y-4">
           <div>
