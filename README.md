@@ -30,7 +30,7 @@
 
 ---
 
-## 🎯 Gambaran Umum Proyek
+## 🎯 Gambaran Umum
 
 ### Masalah yang Dipecahkan
 Manajemen keuangan pribadi seringkali terasa reaktif, bukan proaktif. Banyak individu mencatat pengeluaran mereka tetapi kesulitan menerjemahkan data mentah tersebut menjadi wawasan yang dapat ditindaklanjuti. Mereka tahu *ke mana* uang mereka pergi, tetapi tidak tahu *bagaimana* cara mengoptimalkannya untuk masa depan. Kesenjangan antara data dan keputusan ini menghambat kemajuan finansial.
@@ -46,12 +46,11 @@ Aplikasi ini dirancang untuk individu seperti mahasiswa, profesional, dan *freel
 
 ---
 
-## ✨ Fitur Unggulan
+## ✨ Fitur
 
 FINS dikemas dengan fitur-fitur canggih untuk memberikan pengalaman manajemen keuangan yang lengkap:
 
 -   🔐 **Autentikasi Aman & Isolasi Data:** Sistem login dan registrasi penuh menggunakan Supabase Auth. Setiap data pengguna diisolasi secara ketat menggunakan **Row Level Security (RLS)**, menjamin privasi dan keamanan data tingkat enterprise.
--   📊 **Dashboard Futuristik & Responsif:** Antarmuka utama yang menampilkan semua metrik keuangan penting dalam satu pandangan. Dirancang dengan *dark mode*, efek *glassmorphism*, dan animasi halus untuk pengalaman pengguna yang premium di semua perangkat.
 -   💸 **Manajemen Transaksi Cerdas (CRUD):** Fungsionalitas penuh untuk membuat, membaca, dan menghapus transaksi. Halaman Riwayat dilengkapi dengan filter interaktif dan fitur pencarian *real-time*.
 -   🎯 **Tujuan Finansial Realistis:** Pengguna dapat menetapkan tujuan (misal: "Dana Darurat", "Beli Laptop Baru").
     -   **Logika Sinkronisasi Unik:** Menambah progress ke sebuah tujuan secara otomatis akan membuat **transaksi pengeluaran baru** dengan kategori "Investasi/Tujuan". Ini memastikan saldo pengguna berkurang secara realistis dan tersinkronisasi penuh dengan grafik keuangan.
@@ -80,7 +79,7 @@ FINS dibangun di atas arsitektur *full-stack* modern yang memisahkan antara fron
 
 ---
 
-## 🛠️ Tumpukan Teknologi
+## 🛠️ Teknologi yang Digunakan
 
 | Kategori | Teknologi | Alasan Pemilihan |
 | :--- | :--- | :--- |
@@ -171,4 +170,8 @@ Selama seluruh siklus pengembangan, Large Language Models (LLM) digunakan untuk:
 Saat ini proyek ini dikelola secara pribadi, namun masukan dan saran sangat diterima. Silakan buka *issue* di repositori ini untuk diskusi lebih lanjut.
 
 ## 📜 Lisensi
-Proyek ini dilisensikan di bawah **Lisensi MIT**.
+© 2025 FINS. All Rights Reserved.
+
+Proyek ini adalah karya orisinal dan dilindungi hak cipta.  
+Tidak diperbolehkan untuk menyalin, memodifikasi, mendistribusikan, atau menggunakan kode ini untuk tujuan komersial maupun non-komersial tanpa izin tertulis dari pemilik.
+
