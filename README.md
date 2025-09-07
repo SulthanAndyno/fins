@@ -42,7 +42,7 @@ FINS mengatasi masalah ini dengan menjadi jembatan antara data dan wawasan. Deng
 -   **Insight Berbasis AI:** Memberikan analisis dan rekomendasi proaktif dari IBM Granite, mengubah pengguna dari sekadar pencatat menjadi perencana keuangan yang cerdas.
 
 ### Target Pengguna
-Aplikasi ini dirancang untuk individu melek teknologi, seperti mahasiswa, profesional muda, dan *freelancer*, yang ingin mengambil kendali penuh atas keuangan mereka dengan bantuan teknologi modern.
+Aplikasi ini dirancang untuk individu seperti mahasiswa, profesional, dan *freelancer*, yang ingin mengambil kendali penuh atas keuangan mereka dengan bantuan teknologi modern.
 
 ---
 
